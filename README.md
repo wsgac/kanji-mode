@@ -7,7 +7,8 @@ This is a minor mode for GNU Emacs aiming to address a common need of Japanese l
 
 Installation
 ------------
-To install `kanji-mode` download this repository somewhere you keep your Emacs modes (I keep it under `~/.emacs.d/`). Then follow these simple steps:
+`Kanji-mode` is available on [MELPA](http://melpa.org/#/) to be installed via `package.el`. If you have `MELPA` configured as package repository, just run <kbd>M-x package-install</kbd> and enter "kanji-mode". You can also select it for installation while browsing the package list after running <kbd>M-x package-list-packages</kbd>.
+To install manually `kanji-mode` download this repository somewhere you keep your Emacs modes (I keep it under `~/.emacs.d/`). Then follow these simple steps:
 * Make sure the `kanji-mode` directory is part of your Emacs `load-path`. You can do it by adding the following line to your `.emacs` configuration file: `(add-to-list 'load-path "/path/to/your/kanji-mode")`
 * Require `kanji-mode` by adding the following to `.emacs`: `(require 'kanji-mode)`. `kanji-mode` adds a hook to `text-mode`, so it should launch automatically whenever you edit a text file. If you need it in other circumstances (temporary buffers, etc.), you can always launch it manually by hitting <kbd>M-x</kbd> and entering "kanji-mode".
 

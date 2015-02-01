@@ -47,7 +47,7 @@
 Buffer can be closed by hitting `q`"
   (with-current-buffer (generate-new-buffer name)
     (let ((image (get-svg-for-kanji-code name)))
-      (turn-on-iimage-mode)
+      (iimage-mode)
       (iimage-mode-buffer t)
       (insert-image image)
       (local-set-key (kbd "q") 'kill-this-buffer)
