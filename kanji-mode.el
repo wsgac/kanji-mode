@@ -31,6 +31,7 @@
 ;;;;;;;;;;;
 ;; Paths ;;
 ;;;;;;;;;;;
+
 (defvar *kanji-svg-path* (concat (file-name-directory load-file-name) "kanji")
   "Relative path to stroke order files in SVG format.")
 (make-variable-buffer-local '*kanji-svg-path*) 
@@ -38,6 +39,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utility functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun kanji-mode-char-to-hex (char)
   "Return hex code for character, padded with `0`s to conform with KanjiVG naming convention."
   (format "%05x" char))
@@ -45,6 +47,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Stroke order functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun get-svg-for-kanji-code (code)
   "Return an image object for the Unicode code provided."
   (let ((image-path (concat (expand-file-name code *kanji-svg-path*) ".svg")))
@@ -70,6 +73,8 @@ Buffer can be closed by hitting `q`"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode definition ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;###autoload
 (define-minor-mode kanji-mode
   "Minor mode for displaying Japanese characters' stroke orders."
   :lighter " kanji"
