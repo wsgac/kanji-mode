@@ -15,6 +15,7 @@ To install manually `kanji-mode` download this repository somewhere you keep you
 Usage
 -----
 Once `kanji-mode` is active, you should be able to see the string "kanji" in the minor mode list in the buffer mode line at the bottom. Whenever you want to check the stroke order for a character under the cursor, hit <kbd>M-s M-o</kbd> (I tried to make this keybinding intuitively suggest "**s**troke **o**rder") and a new buffer will appear, containing the image of your character with its stroke order. When you're done viewing it, hit <kbd>q</kbd> to close the buffer and return to your text. Below are two screenshots showing an example usage:
+
 ![Some text in Japanese with the cursor pointing to a single character](screenshots/kanji-mode-text.png)
 ![Image of the character with stroke order](screenshots/kanji-mode-image.png)
 
