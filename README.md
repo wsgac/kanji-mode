@@ -10,7 +10,7 @@ Installation
 `Kanji-mode` is available on [MELPA](http://melpa.org/#/) to be installed via `package.el`. If you have `MELPA` configured as package repository, just run <kbd>M-x package-install</kbd> and enter "kanji-mode". You can also select it for installation while browsing the package list after running <kbd>M-x package-list-packages</kbd>.
 To install manually `kanji-mode` download this repository somewhere you keep your Emacs modes (I keep it under `~/.emacs.d/`). Then follow these simple steps:
 * Make sure the `kanji-mode` directory is part of your Emacs `load-path`. You can do it by adding the following line to your `.emacs` configuration file: `(add-to-list 'load-path "/path/to/your/kanji-mode")`
-* Require `kanji-mode` by adding the following to `.emacs`: `(require 'kanji-mode)`. `kanji-mode` adds a hook to `text-mode`, so it should launch automatically whenever you edit a text file. If you need it in other circumstances (temporary buffers, etc.), you can always launch it manually by hitting <kbd>M-x</kbd> and entering "kanji-mode".
+* Require `kanji-mode` by adding the following to `.emacs`: `(require 'kanji-mode)`. `kanji-mode` adds a hook to `text-mode`, so it should launch automatically whenever you edit a text file. If you need it in other circumstances (temporary buffers, etc.), you can always launch it manually by hitting <kbd>M-x</kbd> and entering "kanji-mode". *WARNING* In order to be able to use transcription, you need to install the Kakasi utility. Most Unix-like operating systems already have some convenient way of installing it, otherwise you can find the source [here](http://kakasi.namazu.org/).
 
 Usage
 -----
@@ -19,6 +19,11 @@ Once `kanji-mode` is active, you should be able to see the string "kanji" in the
 ![Some text in Japanese with the cursor pointing to a single character](screenshots/kanji-mode-text.png)
 ![Image of the character with stroke order](screenshots/kanji-mode-image.png)
 
+The transcription functions operate on currently selected region or, if region is empty, on the current `thing-at-point`. The key bindings for them are: <kbd>M-s M-h</kbd> (for function `kanji-mode-kanji-to-hiragana`) and <kbd>M-s M-r</kbd> (for function `kanji-mode-all-to-romaji`). Both functions' behavior follows the same pattern with respect to the prefix argument:
+- No prefix argument: echo the result in the minibuffer
+- Prefix argument `-1` (invokable through <kbd>M--</kbd>): place the result in the kill-buffer
+- Any other prefix argument: create a new buffer containing the result (which can be closed by pressing <kbd>q</kbd>)
+
 Acknowledgements
 ----------------
-I'd like to thank Ulrich Apel and all contributors of the [KanjiVG](http://kanjivg.tagaini.net/) project for doing the meticulous work I'd never have the patience to do. I've only made small changes to their files (added a white background so it works well with dark Emacs themes and incresed the size to make it more legible) and dropped variants (Kaisho, etc.) since they were unusable in my mode.
+I'd like to thank Ulrich Apel and all contributors of the [KanjiVG](http://kanjivg.tagaini.net/) project for doing the meticulous work I'd never have the patience to do. I've only made small changes to their files (added a white background so it works well with dark Emacs themes and incresed the size to make it more legible) and dropped variants (Kaisho, etc.) since they were unusable in my mode. I'd also like to extend my thanks to Hironobu Takahashi, author of the [Kakasi](http://kakasi.namazu.org/) utility, which does an excellent job transcribing between different alphabets.

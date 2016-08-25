@@ -28,21 +28,89 @@
 
 ;;; Code:
 
-;;;;;;;;;;;
-;; Paths ;;
-;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Paths and variables ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar *kanji-svg-path* (concat (file-name-directory load-file-name) "kanji")
   "Relative path to stroke order files in SVG format.")
-(make-variable-buffer-local '*kanji-svg-path*) 
+(make-variable-buffer-local '*kanji-svg-path*)
+
+(defvar *km:kakasi-executable* (locate-file "kakasi" exec-path)
+  "Path to Kakasi binary.")
+
+(defvar *km:kakasi-common-options* "-iutf8 -outf8"
+  "Kakasi command-line options common to all calls.")
+
+;; Conversion options
+(defvar *km:kanji->hiragana* "-JH"
+  "Kakasi comman-line options for converting kanji to hiragana.")
+
+(defvar *km:all->romaji* "-Ja -Ha -Ka -ka -Ea"
+  "Kakasi comman-line options for converting Japanese to romaji.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utility functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun kanji-mode-char-to-hex (char)
+(defun km:char-to-hex (char)
   "Return hex code for character, padded with `0`s to conform with KanjiVG naming convention."
   (format "%05x" char))
+
+(defun km:command->string (text conversion &optional exec common)
+  "Run conversion command on TEXT using options specified in
+   CONVERSION. Optionally provide your own Kakasi EXECutable and
+   COMMON CLI options. Since Kakasi only accepts files as input,
+   I'm using heredocs to make TEXT look like a file."
+  (when (null exec) (setq exec *km:kakasi-executable*))
+  (when (null common) (setq common *km:kakasi-common-options*))
+  (unless (and *km:kakasi-executable*
+	       (file-exists-p *km:kakasi-executable*)
+	       (file-executable-p *km:kakasi-executable*))
+    (error "You don't seem to have Kakasi installed."))
+  (replace-regexp-in-string
+   "\n$" "" (shell-command-to-string
+	     (format "echo %s | %s %s %s" text exec common conversion))))
+
+(defun km:kanji->hiragana (text)
+  (km:command->string text *km:kanji->hiragana*))
+
+(defun km:all->romaji (text)
+  (km:command->string text *km:all->romaji*))
+
+(defmacro km:interactive-function (fn)
+  "Abstract common behavior for transcription functions. When
+   called without a prefix argument, the function's result will
+   be printed in the minibuffer. When called with prefix argument
+   -1, it will place the results in the kill-ring instead. Any
+   other prefix argument will produce a new buffer containing
+   results of the transcription."
+  `(let* ((text (if (= start end)
+		    (thing-at-point 'word)
+		  (buffer-substring start end)))
+	  (transcribed (,fn text)))
+    (cl-case current-prefix-arg
+      ((nil)
+       (message "%s" transcribed))
+      ((-)
+       (kill-new transcribed)
+       (message "Transcription finished; pushed result to kill ring."))
+      (t
+       (with-current-buffer
+	   (generate-new-buffer "kanji-mode transcription")
+	 (insert transcribed)
+	 (local-set-key (kbd "q") 'kill-this-buffer)
+	 (switch-to-buffer (current-buffer))
+	 (message "Press 'q' to kill this buffer."))))))
+
+(defun kanji-mode-kanji-to-hiragana (start end)
+  (interactive "r")
+  (km:interactive-function km:kanji->hiragana))
+
+(defun kanji-mode-all-to-romaji (start end)
+  (interactive "r")
+  (km:interactive-function km:all->romaji))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Stroke order functions ;;
@@ -53,7 +121,7 @@
   (let ((image-path (concat (expand-file-name code *kanji-svg-path*) ".svg")))
     (create-image image-path)))
 
-(defun kanji-mode-create-buffer-with-image (name)
+(defun km:create-buffer-with-image (name)
   "Create new buffer with relevant image and switch to it.
 Buffer can be closed by hitting `q`"
   (with-current-buffer (generate-new-buffer name)
@@ -68,7 +136,7 @@ Buffer can be closed by hitting `q`"
   "Take character at point and try to display its stroke order."
   (interactive "d")
   (let ((char (char-after point)))
-    (kanji-mode-create-buffer-with-image (kanji-mode-char-to-hex char))))
+    (km:create-buffer-with-image (km:char-to-hex char))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode definition ;;
@@ -80,6 +148,8 @@ Buffer can be closed by hitting `q`"
   :lighter " kanji"
   :keymap (let ((map (make-sparse-keymap)))
 	    (define-key map (kbd "M-s M-o") 'kanji-mode-stroke-order)
+	    (define-key map (kbd "M-s M-h") 'kanji-mode-kanji-to-hiragana)
+	    (define-key map (kbd "M-s M-r") 'kanji-mode-all-to-romaji)
 	    map)
   )
 
