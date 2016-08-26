@@ -71,7 +71,7 @@
     (error "You don't seem to have Kakasi installed."))
   (replace-regexp-in-string
    "\n$" "" (shell-command-to-string
-	     (format "echo %s | %s %s %s" text exec common conversion))))
+	     (format "echo '%s' | %s %s %s" text exec common conversion))))
 
 (defun km:kanji->hiragana (text)
   (km:command->string text *km:kanji->hiragana*))
