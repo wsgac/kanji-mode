@@ -25,6 +25,17 @@ The transcription functions operate on currently selected region or, if region i
 - Prefix argument `-1` (invokable through <kbd>M--</kbd>): place the result in the kill-buffer
 - Any other prefix argument: create a new buffer containing the result (which can be closed by pressing <kbd>q</kbd>)
 
+Notes for OpenBSD users
+-----------------------
+
+When trying the Kakasi transcription feature under OpenBSD I experienced some non-obvious problems whereby I would get an empty string instead of the transcription. Some investigation led me first to realize that my `LANG` and `LC_ALL` environment were set to `C`, causing non-ASCII characters to be garbled when running system commands. Setting them to some `UTF-8` locale (e.g. `en_US.UTF-8`) should solve this problem. Another thing I've noticed is that the version of Kakasi available in the Ports system - `2.3.4` for OpenBSD 6.0 and current - had some trouble producing proper characters. My suggestion is to manually install the latest version - `2.3.6`. In order for the `./configure` script to succeed you will need to specify some additional paths:
+    $ wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.gz
+    $ tar xvzf kakasi-2.3.6.tar.gz
+    $ cd kakasi-2.3.6
+    $ CPPFLAGS="-I /usr/local/include" CFLAGS="-I /usr/local/include" LDFLAGS="-L /usr/local/lib" ./configure
+    $ make
+    $ make install
+
 Acknowledgments
 ----------------
 I'd like to thank Ulrich Apel and all contributors of the [KanjiVG](http://kanjivg.tagaini.net/) project for doing the meticulous work I'd never have the patience to do. I've only made small changes to their files (added a white background so it works well with dark Emacs themes and increased the size to make it more legible) and dropped variants (Kaisho, etc.) since they were unusable in my mode. I'd also like to extend my thanks to Hironobu Takahashi, author of the [Kakasi](http://kakasi.namazu.org/) utility, which does an excellent job transcribing between different alphabets.
