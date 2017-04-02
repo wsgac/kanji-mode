@@ -29,6 +29,7 @@ Notes for OpenBSD users
 -----------------------
 
 When trying the Kakasi transcription feature under OpenBSD I experienced some non-obvious problems whereby I would get an empty string instead of the transcription. Some investigation led me first to realize that my `LANG` and `LC_ALL` environment were set to `C`, causing non-ASCII characters to be garbled when running system commands. Setting them to some `UTF-8` locale (e.g. `en_US.UTF-8`) should solve this problem. Another thing I've noticed is that the version of Kakasi available in the Ports system - `2.3.4` for OpenBSD 6.0 and current - had some trouble producing proper characters. My suggestion is to manually install the latest version - `2.3.6`. In order for the `./configure` script to succeed you will need to specify some additional paths:
+    
     $ wget http://kakasi.namazu.org/stable/kakasi-2.3.6.tar.gz
     $ tar xvzf kakasi-2.3.6.tar.gz
     $ cd kakasi-2.3.6
