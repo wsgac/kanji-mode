@@ -45,10 +45,10 @@
 
 ;; Conversion options
 (defvar *km:kanji->hiragana* "-JH"
-  "Kakasi comman-line options for converting kanji to hiragana.")
+  "Kakasi command-line options for converting kanji to hiragana.")
 
 (defvar *km:all->romaji* "-Ja -Ha -Ka -ka -Ea"
-  "Kakasi comman-line options for converting Japanese to romaji.")
+  "Kakasi command-line options for converting Japanese to romaji.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utility functions ;;
