@@ -58,20 +58,16 @@
   "Return hex code for character, padded with `0`s to conform with KanjiVG naming convention."
   (format "%05x" char))
 
-(defun km:command->string (text conversion &optional exec common)
+(cl-defun km:command->string (text conversion &optional
+                                   (exec *km:kakasi-executable*)
+                                   (common *km:kakasi-common-options*))
   "Run conversion command on TEXT using options specified in
    CONVERSION. Optionally provide your own Kakasi EXECutable and
-   COMMON CLI options. Since Kakasi only accepts files as input,
-   I'm using heredocs to make TEXT look like a file."
-  (when (null exec) (setq exec *km:kakasi-executable*))
-  (when (null common) (setq common *km:kakasi-common-options*))
-  (unless (and *km:kakasi-executable*
-	       (file-exists-p *km:kakasi-executable*)
-	       (file-executable-p *km:kakasi-executable*))
+   COMMON CLI options. TEXT is passed to Kakasi via a pipe."
+  (unless (and exec (file-exists-p exec) (file-executable-p exec))
     (error "You don't seem to have Kakasi installed."))
-  (replace-regexp-in-string
-   "\n$" "" (shell-command-to-string
-	     (format "echo '%s' | %s %s %s" text exec common conversion))))
+  (string-trim (shell-command-to-string
+    (format "echo '%s' | %s %s %s" text exec common conversion))))
 
 (defun km:kanji->hiragana (text)
   (km:command->string text *km:kanji->hiragana*))
@@ -116,21 +112,22 @@
 ;; Stroke order functions ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun get-svg-for-kanji-code (code)
+(defun km:get-svg-for-kanji-code (code)
   "Return an image object for the Unicode code provided."
-  (let ((image-path (concat (expand-file-name code *kanji-svg-path*) ".svg")))
+  (let ((image-path (format "%s.svg" (expand-file-name code *kanji-svg-path*))))
     (create-image image-path)))
 
 (defun km:create-buffer-with-image (name)
   "Create new buffer with relevant image and switch to it.
 Buffer can be closed by hitting `q`"
   (with-current-buffer (generate-new-buffer name)
-    (let ((image (get-svg-for-kanji-code name)))
+    (let ((image (km:get-svg-for-kanji-code name)))
       (iimage-mode)
       (iimage-mode-buffer t)
       (insert-image image)
       (local-set-key (kbd "q") 'kill-current-buffer)
-      (switch-to-buffer (current-buffer)))))
+      (switch-to-buffer (current-buffer))
+      (message "Press 'q' to kill this buffer."))))
 
 (defun kanji-mode-stroke-order (point)
   "Take character at point and try to display its stroke order."

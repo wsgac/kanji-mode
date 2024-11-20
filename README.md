@@ -46,6 +46,11 @@ $ CPPFLAGS="-I /usr/local/include" CFLAGS="-I /usr/local/include" LDFLAGS="-L /u
 $ make
 $ make install
 ```
+
+TODO
+----
+- [ ] Include the option to animate SVGs (look [here](https://bitbucket.org/sommerhoff/anikanjivg/) for inspiration)
+
 Acknowledgments
 ----------------
 I'd like to thank Ulrich Apel and all contributors of the [KanjiVG](http://kanjivg.tagaini.net/) project for doing the meticulous work I'd never have the patience to do. I've only made small changes to their files (added a white background so it works well with dark Emacs themes and increased the size to make it more legible) and dropped variants (Kaisho, etc.) since they were unusable in my mode. I'd also like to extend my thanks to Hironobu Takahashi, author of the [Kakasi](http://kakasi.namazu.org/) utility, which does an excellent job transcribing between different alphabets.
