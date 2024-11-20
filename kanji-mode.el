@@ -100,7 +100,7 @@
        (with-current-buffer
 	   (generate-new-buffer "kanji-mode transcription")
 	 (insert transcribed)
-	 (local-set-key (kbd "q") 'kill-this-buffer)
+	 (local-set-key (kbd "q") 'kill-current-buffer)
 	 (switch-to-buffer (current-buffer))
 	 (message "Press 'q' to kill this buffer."))))))
 
@@ -129,7 +129,7 @@ Buffer can be closed by hitting `q`"
       (iimage-mode)
       (iimage-mode-buffer t)
       (insert-image image)
-      (local-set-key (kbd "q") 'kill-this-buffer)
+      (local-set-key (kbd "q") 'kill-current-buffer)
       (switch-to-buffer (current-buffer)))))
 
 (defun kanji-mode-stroke-order (point)
