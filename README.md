@@ -1,9 +1,11 @@
 kanji-mode
 ==========
 
+[![MELPA](https://melpa.org/packages/kanji-mode-badge.svg)](https://melpa.org/#/kanji-mode)
+
 About
 -----
-This is a minor mode for GNU Emacs aiming to address a common need of Japanese language learners - getting the stroke order of a particular Kanji sign. It has a built-in collection of SVG images depicting stroke orders for all Kanji. The collection is a slightly modified and limited version of the SVGs provided by the [KanjiVG](http://kanjivg.tagaini.net/) project. The mode's operation is pretty simple. It retrieves the Unicode code of the character under the Emacs cursor and uses it to retrieve the proper SVG file (the files are happily named using Unicode numbers). It then displays the relevant SVG in a transient buffer. 
+This is a minor mode for GNU Emacs aiming to address a common need of Japanese language learners - getting the stroke order of a particular Kanji character. It has a built-in collection of SVG images depicting stroke orders for all Kanji. The collection is a slightly modified and limited version of the SVGs provided by the [KanjiVG](http://kanjivg.tagaini.net/) project. The mode's operation is pretty simple. It retrieves the Unicode code of the character under the Emacs cursor and uses it to retrieve the proper SVG file (the files are happily named using Unicode numbers). It then displays the relevant SVG in a transient buffer. 
 
 Another useful feature is transcription (Kanji to Hiragana and Kanji to Romaji). This is achieved by leveraging [Kakasi](http://kakasi.namazu.org/) - a CLI tool for transcribing between various scripts used in Japanese.
 
