@@ -51,6 +51,7 @@ $ make install
 
 TODO
 ----
+- [ ] Add tooltips for displaying transcriptions and stroke order
 - [ ] Include the option to animate SVGs (look [here](https://bitbucket.org/sommerhoff/anikanjivg/) for inspiration)
 
 Acknowledgments

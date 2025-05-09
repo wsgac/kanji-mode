@@ -135,6 +135,33 @@ Buffer can be closed by hitting `q`"
   (let ((char (char-after point)))
     (km:create-buffer-with-image (km:char-to-hex char))))
 
+;;;;;;;;;;;;;;
+;; Tooltips ;;
+;;;;;;;;;;;;;;
+
+;; TODO: These need polishing and weaving them into the broader
+;; picture
+
+(defun get-point-coordinates ()
+ (let* ((posn (posn-at-point))
+        (abs-pos (posn-x-y posn))
+        (win (posn-window posn))
+        (edges (window-inside-pixel-edges win)))
+   (cons (+ (car abs-pos) (car edges))
+         (+ (cdr abs-pos) (cadr edges)))))
+
+(defun hiragana-tooltip ()
+  (interactive)
+  (setq current-prefix-arg '-)
+  (let ((inhibit-message t))
+   (call-interactively 'kanji-mode-kanji-to-hiragana))
+  (let* ((point-coords (get-point-coordinates))
+         (tooltip-frame-parameters
+          (cl-list* `(left . ,(car point-coords))
+                    `(bottom . ,(cdr point-coords))
+                    tooltip-frame-parameters)))
+    (tooltip-show (current-kill 0 t))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Minor mode definition ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
